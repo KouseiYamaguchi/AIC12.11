@@ -3,184 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>AIC ゴールドスフィア</title>
+  <title>AICパーティクルプレイ</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="info-card">
-    <p class="eyebrow">three.js Showcase</p>
-    <h1>AICの煌めく金属舞踏</h1>
-    <p>金、黒、赤の光が交差する中、三次元のオブジェクトが浮き上がり、まるで慶應義塾大学AICの創造力が体現したような演出を展開。ページにアクセスするたびに、違う角度で現れるドラマチックなビジュアルを楽しんでください。</p>
-    <div class="cta-row">
-      <button>ENTER STAGE</button>
-      <button>SEE DETAILS</button>
-    </div>
+    <p class="eyebrow">p5.js Experiment</p>
+    <h1>AICのきらめく波動</h1>
+    <p>粒子たちが自由に動きながら、近づくと光のラインでつながる。上の状態は慶應義塾大学AICで交わるアイデアの交差点を表現しています。</p>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
   <script>
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x030202, 0.013);
+    const particles = [];
+    const maxParticles = 160;
+    const linkDistance = 140;
 
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
-    camera.position.set(0, 0, 80);
+    class Particle {
+      constructor() {
+        this.position = createVector(random(width), random(height));
+        this.velocity = p5.Vector.random2D().mult(random(0.4, 1.5));
+        this.size = random(2, 5);
+        this.hue = random(150, 220);
+      }
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(window.devicePixelRatio || 1);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    const ambient = new THREE.AmbientLight(0xfff0c7, 0.8);
-    scene.add(ambient);
-
-    const pointLight = new THREE.PointLight(0xff4e5a, 1.4, 200);
-    pointLight.position.set(40, 40, 50);
-    scene.add(pointLight);
-
-    const goldenMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffcc55,
-      metalness: 0.9,
-      roughness: 0.2,
-      emissive: 0x550000,
-      emissiveIntensity: 0.3,
-    });
-
-    const sphereGeometry = new THREE.SphereGeometry(18, 64, 64);
-    const sphere = new THREE.Mesh(sphereGeometry, goldenMaterial);
-    sphere.rotation.order = 'YXZ';
-    scene.add(sphere);
-
-    const torusGeometry = new THREE.TorusGeometry(24, 0.6, 32, 120);
-    const torusMaterial = new THREE.MeshStandardMaterial({
-      color: 0xcc1f16,
-      metalness: 0.7,
-      roughness: 0.3,
-      emissive: 0x870000,
-      emissiveIntensity: 0.6,
-    });
-    const torus = new THREE.Mesh(torusGeometry, torusMaterial);
-    torus.rotation.x = Math.PI / 2;
-    torus.rotation.y = Math.PI / 4;
-    scene.add(torus);
-
-    const particleGroup = new THREE.Group();
-    const particleGeom = new THREE.BufferGeometry();
-    const particleCount = 360;
-    const positions = new Float32Array(particleCount * 3);
-    const speed = new Float32Array(particleCount);
-    for (let i = 0; i < particleCount; i += 1) {
-      const radius = THREE.MathUtils.randFloat(35, 65);
-      const angle = THREE.MathUtils.randFloat(0, Math.PI * 2);
-      positions[i * 3] = Math.cos(angle) * radius;
-      positions[i * 3 + 1] = THREE.MathUtils.randFloat(-25, 25);
-      positions[i * 3 + 2] = Math.sin(angle) * radius;
-      speed[i] = THREE.MathUtils.randFloat(0.004, 0.012);
-    }
-    particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const particleMaterial = new THREE.PointsMaterial({
-      size: 3.2,
-      color: 0xffc359,
-      transparent: true,
-      opacity: 0.9,
-    });
-    const particles = new THREE.Points(particleGeom, particleMaterial);
-    particleGroup.add(particles);
-    scene.add(particleGroup);
-
-    const glowLight = new THREE.PointLight(0xffc359, 0.6, 250);
-    scene.add(glowLight);
-
-    const ambientPulse = new THREE.PointLight(0xff4e5a, 0.6, 200);
-    ambientPulse.position.set(-20, 25, 30);
-    scene.add(ambientPulse);
-
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffcb57, transparent: true, opacity: 0.45 });
-    const maxLines = 140;
-    const linePositions = new Float32Array(maxLines * 6);
-    const lineGeom = new THREE.BufferGeometry();
-    lineGeom.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-    const lineMesh = new THREE.LineSegments(lineGeom, lineMaterial);
-    scene.add(lineMesh);
-
-    function updateLines() {
-      const positions = particleGeom.attributes.position.array;
-      let ptr = 0;
-      for (let i = 0; i < particleCount; i += 1) {
-        const xi = positions[i * 3];
-        const yi = positions[i * 3 + 1];
-        const zi = positions[i * 3 + 2];
-        for (let j = i + 1; j < particleCount; j += 1) {
-          const dx = xi - positions[j * 3];
-          const dy = yi - positions[j * 3 + 1];
-          const dz = zi - positions[j * 3 + 2];
-          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-          if (dist < 14 && ptr / 3 < maxLines * 2) {
-            linePositions[ptr++] = xi;
-            linePositions[ptr++] = yi;
-            linePositions[ptr++] = zi;
-            linePositions[ptr++] = positions[j * 3];
-            linePositions[ptr++] = positions[j * 3 + 1];
-            linePositions[ptr++] = positions[j * 3 + 2];
-          }
+      update() {
+        this.position.add(this.velocity);
+        if (this.position.x > width || this.position.x < 0) {
+          this.velocity.x *= -1;
+        }
+        if (this.position.y > height || this.position.y < 0) {
+          this.velocity.y *= -1;
         }
       }
-      for (; ptr < maxLines * 6; ptr += 1) {
-        linePositions[ptr] = 0;
+
+      draw() {
+        noStroke();
+        fill(this.hue, 180, 250, 200);
+        circle(this.position.x, this.position.y, this.size);
       }
-      lineGeom.attributes.position.needsUpdate = true;
     }
 
-    const mouse = new THREE.Vector3(0, 0, 0);
-    document.addEventListener('pointermove', (event) => {
-      const x = (event.clientX / window.innerWidth) * 2 - 1;
-      const y = -(event.clientY / window.innerHeight) * 2 + 1;
-      mouse.x = x * 40;
-      mouse.y = y * 35;
-    });
-
-    const cameraTarget = new THREE.Vector3();
-    function animate() {
-      requestAnimationFrame(animate);
-      const time = performance.now() * 0.0004;
-      sphere.rotation.y += 0.0035;
-      sphere.rotation.x += 0.002;
-      torus.rotation.z += 0.0065;
-      torus.rotation.y += 0.003;
-      torus.rotation.x = Math.sin(time * 1.5) * 0.15;
-      torus.rotation.y = time * 0.4;
-
-      for (let i = 0; i < particleCount; i += 1) {
-        const idx = i * 3;
-        const radius = Math.hypot(positions[idx], positions[idx + 2]) + 0.02;
-        const angle = Math.atan2(positions[idx + 2], positions[idx]) + speed[i];
-        positions[idx] = Math.cos(angle) * radius;
-        positions[idx + 1] = Math.sin(time * 1.2 + i) * 12;
-        positions[idx + 2] = Math.sin(angle) * radius;
+    function setup() {
+      createCanvas(windowWidth, windowHeight);
+      colorMode(HSB);
+      for (let i = 0; i < maxParticles; i += 1) {
+        particles.push(new Particle());
       }
-      particleGeom.attributes.position.needsUpdate = true;
-      particleGroup.rotation.y += 0.0025;
-
-      const intensity = 0.5 + Math.sin(time * 2) * 0.3;
-      torusMaterial.emissiveIntensity = 0.5 + Math.sin(time * 1.7) * 0.4;
-      glowLight.intensity = 0.6 + Math.sin(time * 3) * 0.4;
-      ambientPulse.intensity = 0.5 + Math.abs(Math.sin(time * 2.5)) * 0.6;
-
-      updateLines();
-
-      camera.position.x += (mouse.x - camera.position.x) * 0.05;
-      camera.position.y += (mouse.y - camera.position.y) * 0.04;
-      cameraTarget.lerp(mouse, 0.05);
-      camera.lookAt(cameraTarget);
-
-      renderer.render(scene, camera);
     }
-    animate();
 
-    window.addEventListener('resize', () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-    });
+    function draw() {
+      background(220, 80, 5, 30);
+      particles.forEach((particle, idx) => {
+        particle.update();
+        particle.draw();
+        for (let j = idx + 1; j < particles.length; j += 1) {
+          const target = particles[j];
+          const d = dist(
+            particle.position.x,
+            particle.position.y,
+            target.position.x,
+            target.position.y
+          );
+          if (d < linkDistance) {
+            const alpha = map(d, 0, linkDistance, 190, 0);
+            stroke(180, 150, 250, alpha);
+            strokeWeight(1);
+            line(
+              particle.position.x,
+              particle.position.y,
+              target.position.x,
+              target.position.y
+            );
+          }
+        }
+      });
+    }
+
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+    }
   </script>
 </body>
 </html>
