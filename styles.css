@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap');
 
 :root {
-  --ink: #030303;
-  --gold: #ffcf5c;
-  --scarlet: #ff3e2f;
-  --charcoal: #070505;
-  --text: #f9f8f7;
+  color-scheme: dark;
+  --ink: #01030a;
+  --teal: #4bade0;
+  --pink: #ff71ce;
+  --text: #f9fcff;
 }
 
 * {
@@ -14,10 +14,11 @@
 
 body {
   margin: 0;
-  min-height: 200vh;
+  min-height: 100vh;
   font-family: 'Kosugi Maru', 'Inter', sans-serif;
-  background: linear-gradient(180deg, #070407 0%, #050305 70%, #020101 100%);
+  background: radial-gradient(circle at top, rgba(75, 173, 224, 0.15), transparent 35%), var(--ink);
   color: var(--text);
+  overflow: hidden;
 }
 
 canvas {
@@ -26,74 +27,102 @@ canvas {
   z-index: 0;
 }
 
-.scene-wrapper {
+.info-card {
   position: relative;
   z-index: 1;
-  padding-top: 4rem;
-  display: flex;
-  justify-content: center;
+  max-width: 600px;
+  margin: 2.5rem auto 0;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
+  text-align: center;
 }
 
-.insight-card {
-  background: rgba(0, 0, 0, 0.75);
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 2rem;
-  max-width: 560px;
-  box-shadow: 0 35px 70px rgba(2, 2, 2, 0.65);
-  text-align: center;
+.lang-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.lang-btn {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
+  color: inherit;
+  font-size: 0.7rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
+}
+
+.lang-btn.active {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.7);
 }
 
 .eyebrow {
   text-transform: uppercase;
-  letter-spacing: 0.5em;
+  letter-spacing: 0.4em;
   font-size: 0.65rem;
   margin-bottom: 0.5rem;
-  color: var(--scarlet);
+  color: var(--pink);
 }
 
-.insight-card h1 {
-  margin: 0.3rem 0;
-  font-size: clamp(2rem, 4vw, 3rem);
-  color: var(--gold);
-  text-transform: uppercase;
+.info-card h1 {
+  margin: 0.2rem 0;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  color: var(--teal);
+  transition: transform 0.28s ease, opacity 0.28s ease;
 }
 
-.insight-card p {
-  margin: 0.5rem 0 0;
-  line-height: 1.65;
-  color: rgba(249, 248, 247, 0.9);
+.info-card p {
+  margin: 0.6rem 0 0;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  transition: transform 0.28s ease, opacity 0.28s ease;
 }
 
-.text-stack {
+.content-grid {
   position: relative;
   z-index: 1;
-  max-width: 960px;
-  margin: 4rem auto 0;
-  padding: 0 1rem 3rem;
+  max-width: 1100px;
+  margin: 2rem auto 3rem;
   display: grid;
-  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  padding: 0 1rem;
 }
 
-.text-stack section {
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 18px;
-  padding: 1.2rem 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6);
+.card {
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: rgba(4, 6, 12, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
 }
 
-.text-stack h2 {
-  margin: 0 0 0.4rem;
-  letter-spacing: 0.2em;
+.card h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  font-size: 0.95rem;
-  color: var(--gold);
+  color: var(--teal);
+  transition: transform 0.28s ease, opacity 0.28s ease;
 }
 
-.text-stack p {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: rgba(245, 245, 245, 0.9);
+.card p {
+  margin-top: 0.65rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+.fade {
+  opacity: 0;
+  transform: translateY(-6px);
 }
