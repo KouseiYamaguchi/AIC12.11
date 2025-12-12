@@ -140,19 +140,31 @@
     };
 
     const cards = document.querySelectorAll('.card');
+    const cardData = Array.from(cards).map((node) => ({
+      title: node.querySelector('h2'),
+      body: node.querySelector('p'),
+    }));
     const infoKeys = ['eyebrow', 'headline', 'hero'];
     const infoEls = infoKeys.map((key) => document.querySelector(`[data-key="${key}"]`));
+
+    function transitionText(el, text) {
+      if (!el) return;
+      el.classList.add('fade');
+      setTimeout(() => {
+        el.textContent = text;
+        requestAnimationFrame(() => el.classList.remove('fade'));
+      }, 220);
+    }
+
     function setLanguage(lang) {
       const texts = translations[lang] || translations.ja;
       infoKeys.forEach((key, idx) => {
-        infoEls[idx].textContent = texts[key];
+        transitionText(infoEls[idx], texts[key]);
       });
-      cards[0].querySelector('h2').textContent = texts.card1Title;
-      cards[0].querySelector('p').textContent = texts.card1Body;
-      cards[1].querySelector('h2').textContent = texts.card2Title;
-      cards[1].querySelector('p').textContent = texts.card2Body;
-      cards[2].querySelector('h2').textContent = texts.card3Title;
-      cards[2].querySelector('p').textContent = texts.card3Body;
+      cardData.forEach((card, index) => {
+        transitionText(card.title, texts[`card${index + 1}Title`]);
+        transitionText(card.body, texts[`card${index + 1}Body`]);
+      });
       document.querySelectorAll('.lang-btn').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
       });
