@@ -3,85 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>AICパーティクルプレイ</title>
+  <title>AIC ゴールドスフィア</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="info-card">
-    <p class="eyebrow">p5.js Experiment</p>
-    <h1>AICのきらめく波動</h1>
-    <p>粒子たちが自由に動きながら、近づくと光のラインでつながる。上の状態は慶應義塾大学AICで交わるアイデアの交差点を表現しています。</p>
+    <p class="eyebrow">three.js Showcase</p>
+    <h1>AICの煌めく金属舞踏</h1>
+    <p>金、黒、赤の光が交差する中、三次元のオブジェクトが浮き上がり、まるで慶應義塾大学AICの創造力が体現したような演出を展開。ページにアクセスするたびに、違う角度で現れるドラマチックなビジュアルを楽しんでください。</p>
+    <div class="cta-row">
+      <button>ENTER STAGE</button>
+      <button>SEE DETAILS</button>
+    </div>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
   <script>
-    const particles = [];
-    const maxParticles = 160;
-    const linkDistance = 140;
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x030202, 0.013);
 
-    class Particle {
-      constructor() {
-        this.position = createVector(random(width), random(height));
-        this.velocity = p5.Vector.random2D().mult(random(0.4, 1.5));
-        this.size = random(2, 5);
-        this.hue = random(150, 220);
-      }
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
+    camera.position.set(0, 0, 80);
 
-      update() {
-        this.position.add(this.velocity);
-        if (this.position.x > width || this.position.x < 0) {
-          this.velocity.x *= -1;
-        }
-        if (this.position.y > height || this.position.y < 0) {
-          this.velocity.y *= -1;
-        }
-      }
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
 
-      draw() {
-        noStroke();
-        fill(this.hue, 180, 250, 200);
-        circle(this.position.x, this.position.y, this.size);
-      }
+    const ambient = new THREE.AmbientLight(0xfff0c7, 0.8);
+    scene.add(ambient);
+
+    const pointLight = new THREE.PointLight(0xff4e5a, 1.4, 200);
+    pointLight.position.set(40, 40, 50);
+    scene.add(pointLight);
+
+    const goldenMaterial = new THREE.MeshStandardMaterial({
+      color: 0xffcc55,
+      metalness: 0.9,
+      roughness: 0.2,
+      emissive: 0x550000,
+      emissiveIntensity: 0.3,
+    });
+
+    const sphereGeometry = new THREE.SphereGeometry(18, 64, 64);
+    const sphere = new THREE.Mesh(sphereGeometry, goldenMaterial);
+    sphere.rotation.order = 'YXZ';
+    scene.add(sphere);
+
+    const torusGeometry = new THREE.TorusGeometry(24, 0.6, 32, 120);
+    const ringMaterial = new THREE.MeshStandardMaterial({
+      color: 0xcc1f16,
+      metalness: 0.7,
+      roughness: 0.3,
+      emissive: 0x870000,
+      emissiveIntensity: 0.6,
+    });
+    const ring = new THREE.Mesh(torusGeometry, ringMaterial);
+    ring.rotation.x = Math.PI / 2;
+    ring.rotation.y = Math.PI / 4;
+    scene.add(ring);
+
+    const particleGroup = new THREE.Group();
+    const particleGeom = new THREE.BufferGeometry();
+    const particleCount = 260;
+    const positions = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount; i += 1) {
+      const radius = THREE.MathUtils.randFloat(35, 60);
+      const angle = THREE.MathUtils.randFloat(0, Math.PI * 2);
+      positions[i * 3] = Math.cos(angle) * radius;
+      positions[i * 3 + 1] = THREE.MathUtils.randFloat(-20, 20);
+      positions[i * 3 + 2] = Math.sin(angle) * radius;
     }
+    particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-    function setup() {
-      createCanvas(windowWidth, windowHeight);
-      colorMode(HSB);
-      for (let i = 0; i < maxParticles; i += 1) {
-        particles.push(new Particle());
-      }
-    }
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 2.6,
+      color: 0xffc359,
+      transparent: true,
+      opacity: 0.85,
+    });
+    const particles = new THREE.Points(particleGeom, particleMaterial);
+    particleGroup.add(particles);
+    scene.add(particleGroup);
 
-    function draw() {
-      background(220, 80, 5, 30);
-      particles.forEach((particle, idx) => {
-        particle.update();
-        particle.draw();
-        for (let j = idx + 1; j < particles.length; j += 1) {
-          const target = particles[j];
-          const d = dist(
-            particle.position.x,
-            particle.position.y,
-            target.position.x,
-            target.position.y
-          );
-          if (d < linkDistance) {
-            const alpha = map(d, 0, linkDistance, 190, 0);
-            stroke(180, 150, 250, alpha);
-            strokeWeight(1);
-            line(
-              particle.position.x,
-              particle.position.y,
-              target.position.x,
-              target.position.y
-            );
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffd700, transparent: true, opacity: 0.35 });
+    const lineGeom = new THREE.BufferGeometry();
+    const maxLines = 80;
+    const linePositions = new Float32Array(maxLines * 6);
+    lineGeom.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+    const lineMesh = new THREE.LineSegments(lineGeom, lineMaterial);
+    scene.add(lineMesh);
+
+    function updateLines() {
+      const positions = particleGeom.attributes.position.array;
+      let ptr = 0;
+      for (let i = 0; i < particleCount; i += 1) {
+        for (let j = i + 1; j < particleCount; j += 1) {
+          const dx = positions[i * 3] - positions[j * 3];
+          const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+          const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+          if (dist < 16 && ptr / 3 < maxLines * 2) {
+            linePositions[ptr++] = positions[i * 3];
+            linePositions[ptr++] = positions[i * 3 + 1];
+            linePositions[ptr++] = positions[i * 3 + 2];
+            linePositions[ptr++] = positions[j * 3];
+            linePositions[ptr++] = positions[j * 3 + 1];
+            linePositions[ptr++] = positions[j * 3 + 2];
           }
         }
-      });
+      }
+      for (; ptr < maxLines * 6; ptr += 1) {
+        linePositions[ptr] = 0;
+      }
+      lineGeom.attributes.position.needsUpdate = true;
     }
 
-    function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
+    const mouse = new THREE.Vector2();
+    document.addEventListener('pointermove', (event) => {
+      const x = (event.clientX / window.innerWidth) * 2 - 1;
+      const y = -(event.clientY / window.innerHeight) * 2 + 1;
+      mouse.set(x * 40, y * 30);
+    });
+
+    function animate() {
+      requestAnimationFrame(animate);
+      sphere.rotation.y += 0.002;
+      sphere.rotation.x += 0.001;
+      ring.rotation.z += 0.004;
+      particleGroup.rotation.y += 0.002;
+
+      const offset = particleGeom.attributes.position.array;
+      for (let i = 0; i < particleCount; i += 1) {
+        const idx = i * 3;
+        offset[idx] += Math.sin(i + performance.now() * 0.0007) * 0.03;
+        offset[idx + 1] += Math.cos(i + performance.now() * 0.0005) * 0.02;
+        offset[idx + 2] += Math.sin(i + performance.now() * 0.0009) * 0.025;
+      }
+      particleGeom.attributes.position.needsUpdate = true;
+      updateLines();
+
+      camera.position.x += (mouse.x - camera.position.x) * 0.04;
+      camera.position.y += (mouse.y - camera.position.y) * 0.04;
+      camera.lookAt(scene.position);
+
+      renderer.render(scene, camera);
     }
+    animate();
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
   </script>
 </body>
 </html>
