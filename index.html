@@ -142,9 +142,34 @@
       pointer-events: none;
     }
 
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
     .hero-content {
       position: relative;
       z-index: 1;
+    }
+
+    .hero-visual {
+      border-radius: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-visual img {
+      width: 100%;
+      display: block;
+      border-radius: 18px;
+      object-fit: cover;
+      filter: drop-shadow(0 10px 30px rgba(20, 0, 40, 0.6));
     }
 
     .hero-title {
@@ -388,6 +413,9 @@
         flex-direction: column;
         align-items: stretch;
       }
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -400,37 +428,42 @@
   </header>
   <main>
     <section class="hero">
-      <div class="hero-content">
-        <p class="hero-highlight">このページはAIとの対話から生まれた、唯一無二のビジュアル物語</p>
-        <h1 class="hero-title">光速デザイン</h1>
-        <p class="hero-sub">
-          アニメーションのような躍動感、映画のように深い奥行き、そして思わず声を上げたくなる躍動。
-          私たちはあなたのイメージを言葉に変え、AIが描き出した<em>アニメージュ</em>スタイルの世界を
-          一緒に作り上げます。
-        </p>
-        <div class="hero-tags">
-          <span class="hero-tag">思いを形に</span>
-          <span class="hero-tag">アニメ風表現</span>
-          <span class="hero-tag">高速プロトタイピング</span>
-          <span class="hero-tag">柔軟なフィードバック</span>
+      <div class="hero-grid">
+        <div class="hero-content">
+          <p class="hero-highlight">このページはAIとの対話から生まれた、唯一無二のビジュアル物語</p>
+          <h1 class="hero-title">光速デザイン</h1>
+          <p class="hero-sub">
+            アニメーションのような躍動感、映画のように深い奥行き、そして思わず声を上げたくなる躍動。
+            私たちはあなたのイメージを言葉に変え、AIが描き出した<em>アニメージュ</em>スタイルの世界を
+            一緒に作り上げます。
+          </p>
+          <div class="hero-tags">
+            <span class="hero-tag">思いを形に</span>
+            <span class="hero-tag">アニメ風表現</span>
+            <span class="hero-tag">高速プロトタイピング</span>
+            <span class="hero-tag">柔軟なフィードバック</span>
+          </div>
+          <div class="hero-actions">
+            <button class="primary">今すぐリクエスト</button>
+            <button class="secondary">構想を共有</button>
+          </div>
+          <div class="motion-track">
+            <article class="motion-card">
+              <strong>ダイナミックな層構造</strong>
+              <p>背景と前景の光、粒子、ラインを複雑に重ねて、アニメの演出を彷彿とさせる奥行きを生み出します。</p>
+            </article>
+            <article class="motion-card">
+              <strong>トーンとリズム</strong>
+              <p>音楽的なアクセントが効いたレイアウトで、読者にページを進むごとに心躍る体験を届けます。</p>
+            </article>
+            <article class="motion-card">
+              <strong>対話によるアジャイル</strong>
+              <p>あなたからの言葉をトリガーに、AIとともに表情豊かなアニメ的世界を毎回アップデート。</p>
+            </article>
+          </div>
         </div>
-        <div class="hero-actions">
-          <button class="primary">今すぐリクエスト</button>
-          <button class="secondary">構想を共有</button>
-        </div>
-        <div class="motion-track">
-          <article class="motion-card">
-            <strong>ダイナミックな層構造</strong>
-            <p>背景と前景の光、粒子、ラインを複雑に重ねて、アニメの演出を彷彿とさせる奥行きを生み出します。</p>
-          </article>
-          <article class="motion-card">
-            <strong>トーンとリズム</strong>
-            <p>音楽的なアクセントが効いたレイアウトで、読者にページを進むごとに心躍る体験を届けます。</p>
-          </article>
-          <article class="motion-card">
-            <strong>対話によるアジャイル</strong>
-            <p>あなたからの言葉をトリガーに、AIとともに表情豊かなアニメ的世界を毎回アップデート。</p>
-          </article>
+        <div class="hero-visual">
+          <img src="shashin.png" alt="光が溢れる未来都市をモチーフにしたビジュアル">
         </div>
       </div>
     </section>
