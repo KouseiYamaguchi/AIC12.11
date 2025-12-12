@@ -3,180 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>AICパーティクルプレイ</title>
+  <title>Scroll Gun Showcase</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="info-card">
-    <div class="lang-row">
-      <button data-lang="ja" class="lang-btn active">日本語</button>
-      <button data-lang="en" class="lang-btn">English</button>
-      <button data-lang="de" class="lang-btn">Deutsch</button>
+  <div class="scene-wrapper">
+    <div class="insight-card">
+      <p class="eyebrow">三次元スクロール</p>
+      <h1>Scroll to Spin the Gun</h1>
+      <p>スクロール量に応じて三次元の銃が回転し、AICで磨いた集中力と直感がリンクするエクスペリエンスを目指しました。ゆっくり下に進むたび、鋭いエッジとダークな金属の光が揺れます。</p>
     </div>
-    <p class="eyebrow" data-key="eyebrow">p5.js Experiment</p>
-    <h1 data-key="headline">AICのきらめく波動</h1>
-    <p data-key="hero">粒子たちが自由に動きながら、近づくと光のラインでつながる。上の状態は慶應義塾大学AICで交わるアイデアの交差点を表現しています。</p>
   </div>
-  <div class="content-grid">
-    <article class="card">
-      <h2>About AIC</h2>
-      <p>慶應義塾大学の Advanced Innovation Challenge は、学内外のインスピレーションを持ち寄り、夜遅くまで語り合いながらプロジェクトを育てる場。多様なバックグラウンドの学生とメンターが、気ままにアイデアを試遊するような自由な文化が特徴です。</p>
-    </article>
-    <article class="card">
-      <h2>My Journey</h2>
-      <p>入学当初は開発とデザインの境界で悩んでいましたが、AICのピアレビューとデモデイが私のフィードバックループの源になりました。今では、プロトタイプから操作体験やサウンドまですべて自分で整えることを楽しんでいます。</p>
-    </article>
-    <article class="card">
-      <h2>Why It Matters</h2>
-      <p>AICでは失敗も次のレベルへのダッシュポイント。互いの「ヤバい」「ウケる」を直感的に交換し、現実の講義では得られない素直さとスピードで発想を進化させています。それを支えてくれるのが夕焼けムードの図書室と共創カフェです。</p>
-    </article>
+
+  <div class="text-stack">
+    <section>
+      <h2>Scroll-Controlled Animation</h2>
+      <p>スクロール位置は 0~1 に正規化され、ガングループがその値に応じて軸をまわる。ブラウザの縦移動が直接 Three.js のシーンに作用し、ユーザーの動きとオブジェクトの動きが共鳴します。</p>
+    </section>
+    <section>
+      <h2>Gun Detail</h2>
+      <p>バレル、カバー、ハンドルを別々の BoxMesh で表現し、金属の質感を持たせたマテリアルで構成。ローズゴールド、黒、赤のライトでアプローチし、ディテールが浮き立つように調整しています。</p>
+    </section>
+    <section>
+      <h2>Keep Scrolling</h2>
+      <p>スクロールが止まると銃も減速し、ゆっくりと回転をキープ。再び上下に移動すると照明の反射も変わって、静かな劇場感を演出します。</p>
+    </section>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
   <script>
-    const particles = [];
-    const maxParticles = 160;
-    const linkDistance = 140;
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0x050104, 15, 120);
 
-    class Particle {
-      constructor() {
-        this.position = createVector(random(width), random(height));
-        this.velocity = p5.Vector.random2D().mult(random(0.4, 1.5));
-        this.size = random(2, 5);
-        this.hue = random(150, 220);
-      }
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 500);
+    camera.position.set(0, 0, 60);
 
-      update() {
-        this.position.add(this.velocity);
-        if (this.position.x > width || this.position.x < 0) {
-          this.velocity.x *= -1;
-        }
-        if (this.position.y > height || this.position.y < 0) {
-          this.velocity.y *= -1;
-        }
-      }
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x030303, 1);
+    document.body.appendChild(renderer.domElement);
 
-      draw() {
-        noStroke();
-        fill(this.hue, 180, 250, 200);
-        circle(this.position.x, this.position.y, this.size);
-      }
-    }
+    const ambient = new THREE.AmbientLight(0xffffff, 0.45);
+    scene.add(ambient);
 
-    function setup() {
-      createCanvas(windowWidth, windowHeight);
-      colorMode(HSB);
-      for (let i = 0; i < maxParticles; i += 1) {
-        particles.push(new Particle());
-      }
-    }
+    const keyLight = new THREE.DirectionalLight(0xffca62, 1.1);
+    keyLight.position.set(40, 20, 60);
+    scene.add(keyLight);
 
-    function draw() {
-      background(220, 80, 5, 30);
-      particles.forEach((particle, idx) => {
-        particle.update();
-        particle.draw();
-        for (let j = idx + 1; j < particles.length; j += 1) {
-          const target = particles[j];
-          const d = dist(
-            particle.position.x,
-            particle.position.y,
-            target.position.x,
-            target.position.y
-          );
-          if (d < linkDistance) {
-            const alpha = map(d, 0, linkDistance, 190, 0);
-            stroke(180, 150, 250, alpha);
-            strokeWeight(1);
-            line(
-              particle.position.x,
-              particle.position.y,
-              target.position.x,
-              target.position.y
-            );
-          }
-        }
-      });
-    }
+    const rimLight = new THREE.DirectionalLight(0xff2d3d, 0.8);
+    rimLight.position.set(-30, 15, 20);
+    scene.add(rimLight);
 
-    function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
-    }
-  </script>
-  <script>
-    const translations = {
-      ja: {
-        eyebrow: 'p5.js Experiment',
-        headline: 'AICのきらめく波動',
-        hero: '粒子たちが自由に動きながら、近づくと光のラインでつながる。上の状態は慶應義塾大学AICで交わるアイデアの交差点を表現しています。',
-        card1Title: 'About AIC',
-        card1Body: '慶應義塾大学の Advanced Innovation Challenge は、学内外のインスピレーションを持ち寄り、夜遅くまで語り合いながらプロジェクトを育てる場。多様なバックグラウンドの学生とメンターが、気ままにアイデアを試遊するような自由な文化が特徴です。',
-        card2Title: 'My Journey',
-        card2Body: '入学当初は開発とデザインの境界で悩んでいましたが、AICのピアレビューとデモデイが私のフィードバックループの源になりました。今では、プロトタイプから操作体験やサウンドまですべて自分で整えることを楽しんでいます。',
-        card3Title: 'Why It Matters',
-        card3Body: 'AICでは失敗も次のレベルへのダッシュポイント。互いの「ヤバい」「ウケる」を直感的に交換し、現実の講義では得られない素直さとスピードで発想を進化させています。それを支えてくれるのが夕焼けムードの図書室と共創カフェです。',
-      },
-      en: {
-        eyebrow: 'p5.js Experiment',
-        headline: 'AIC Spark Waves',
-        hero: 'Particles drift freely and connect with luminous lines whenever they come close—an homage to the intersection of ideas inside Keio University’s Advanced Innovation Challenge.',
-        card1Title: 'About AIC',
-        card1Body: 'The Advanced Innovation Challenge gathers curious students from across Keio to nurture projects through late-night conversations and playful experimentation with mentors and peers.',
-        card2Title: 'My Journey',
-        card2Body: 'Early on I wrestled with the edges of development and design, but the peer reviews and demo days at AIC rewired my feedback loop. Now I relish shaping everything from prototypes to interactive feel and sound.',
-        card3Title: 'Why It Matters',
-        card3Body: 'At AIC, “failure” becomes a dash point to the next level. Exchanging raw “Whoa” and “Hype” moments lets ideas evolve with a candid speed you seldom find in lecture halls.',
-      },
-      de: {
-        eyebrow: 'p5.js Experiment',
-        headline: 'AIC Strahlenfeld',
-        hero: 'Partikel schweben frei und verbinden sich mit leuchtenden Linien, sobald sie sich nähern—eine Hommage an die Ideenübergänge im Advanced Innovation Challenge der Keio University.',
-        card1Title: 'Über AIC',
-        card1Body: 'Der Advanced Innovation Challenge bringt neugierige Studierende zusammen, um Projekte durch nächtliche Gespräche und experimentelle Spielfreude gemeinsam mit Mentoren zu entwickeln.',
-        card2Title: 'Mein Weg',
-        card2Body: 'Anfangs rang ich mit den Grenzen zwischen Entwicklung und Design, doch die Peer Reviews und Demo Days im AIC haben meinen Feedback-Zyklus neu justiert. Heute genieße ich es, von Prototypen bis Sound alles selbst zu orchestrieren.',
-        card3Title: 'Warum es zählt',
-        card3Body: 'Im AIC wird ein Scheitern zum Energieschub für die nächste Level-Stufe. Rohe „Wow“- und „Geht ab“-Momente werden ausgetauscht und lassen die Ideen mit einer Ehrlichkeit reifen, die man im Hörsaal selten findet.',
-      },
-    };
+    const gunGroup = new THREE.Group();
 
-    const cards = document.querySelectorAll('.card');
-    const cardData = Array.from(cards).map((node) => ({
-      title: node.querySelector('h2'),
-      body: node.querySelector('p'),
-    }));
-    const infoKeys = ['eyebrow', 'headline', 'hero'];
-    const infoEls = infoKeys.map((key) => document.querySelector(`[data-key="${key}"]`));
+    const barrel = new THREE.Mesh(
+      new THREE.BoxGeometry(22, 2.2, 2.2),
+      new THREE.MeshStandardMaterial({ color: 0xd3aa58, metalness: 0.95, roughness: 0.15 })
+    );
+    barrel.position.x = 6;
+    gunGroup.add(barrel);
 
-    function transitionText(el, text) {
-      if (!el) return;
-      el.classList.add('fade');
-      setTimeout(() => {
-        el.textContent = text;
-        requestAnimationFrame(() => el.classList.remove('fade'));
-      }, 220);
-    }
+    const receiver = new THREE.Mesh(
+      new THREE.BoxGeometry(11, 3.3, 3.3),
+      new THREE.MeshStandardMaterial({ color: 0x121212, metalness: 0.8, roughness: 0.2 })
+    );
+    receiver.position.set(-1, -0.7, 0);
+    gunGroup.add(receiver);
 
-    function setLanguage(lang) {
-      const texts = translations[lang] || translations.ja;
-      infoKeys.forEach((key, idx) => {
-        transitionText(infoEls[idx], texts[key]);
-      });
-      cardData.forEach((card, index) => {
-        transitionText(card.title, texts[`card${index + 1}Title`]);
-        transitionText(card.body, texts[`card${index + 1}Body`]);
-      });
-      document.querySelectorAll('.lang-btn').forEach((btn) => {
-        btn.classList.toggle('active', btn.dataset.lang === lang);
-      });
-    }
+    const handle = new THREE.Mesh(
+      new THREE.BoxGeometry(3.5, 8, 1.8),
+      new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.5, roughness: 0.35 })
+    );
+    handle.position.set(-3.5, -4.2, 0);
+    handle.rotation.z = -0.3;
+    gunGroup.add(handle);
 
-    document.querySelectorAll('.lang-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        setLanguage(btn.dataset.lang);
-      });
+    const sight = new THREE.Mesh(
+      new THREE.BoxGeometry(6.5, 0.7, 0.7),
+      new THREE.MeshStandardMaterial({ color: 0xff3e2f, emissive: 0x7f1c11, emissiveIntensity: 0.6 })
+    );
+    sight.position.set(12, 1.1, 0);
+    gunGroup.add(sight);
+
+    scene.add(gunGroup);
+
+    const scrollState = { value: 0, target: 0 };
+    window.addEventListener('scroll', () => {
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? window.scrollY / docHeight : 0;
+      scrollState.target = scrollPercent;
     });
 
-    setLanguage('ja');
+    function animate() {
+      requestAnimationFrame(animate);
+      scrollState.value += (scrollState.target - scrollState.value) * 0.08;
+      gunGroup.rotation.y = scrollState.value * Math.PI * 2;
+      gunGroup.rotation.x = scrollState.value * 0.4;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
   </script>
 </body>
 </html>
