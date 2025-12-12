@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Gold Aura Portfolio!!</title>
+  <title>光速デザインスタジオ</title>
   <style>
     :root {
       color-scheme: dark;
-      --gold: #ffd966;
-      --warm: #d48806;
-      --shadow: rgba(0, 0, 0, 0.5);
-      --text: #f6f1eb;
-      --panel: rgba(15, 13, 10, 0.85);
-      --sparkle: rgba(255, 217, 102, 0.15);
+      --ink: #030712;
+      --aura: #fff7d8;
+      --rose: #ff5c8d;
+      --sky: #5af5ff;
+      --shell: #16192d;
+      --spin-angle: 0deg;
     }
 
     * {
@@ -22,278 +22,467 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
-      background: #010101;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
+      font-family: 'Noto Sans JP', 'Inter', system-ui, sans-serif;
+      background: radial-gradient(circle at top, rgba(244, 233, 191, 0.15), transparent 45%), var(--ink);
+      color: #f0f4ff;
+      overflow-x: hidden;
       position: relative;
-      overflow: hidden;
     }
 
-    body::before,
-    body::after {
-      content: '';
-      position: absolute;
-      inset: 0;
+    .orb, .orb-shadow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(30px);
+      opacity: 0.7;
+      z-index: 0;
       pointer-events: none;
-      background: radial-gradient(circle, rgba(255, 214, 102, 0.4), transparent 55%);
-      opacity: 0.6;
-      mix-blend-mode: screen;
-      animation: pulse 6s ease-in-out infinite;
     }
 
-    body::after {
-      background: radial-gradient(circle at 80% 10%, rgba(255, 214, 102, 0.5), transparent 45%);
-      animation-duration: 8s;
+    .orb {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(255, 119, 134, 0.65), transparent 60%);
+      top: 12%;
+      right: -120px;
+      animation: float 14s ease-in-out infinite;
     }
 
-    @keyframes pulse {
+    .orb-shadow {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(94, 245, 255, 0.5), transparent 70%);
+      bottom: 6%;
+      left: -80px;
+      animation: float 18s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
       0% {
-        transform: scale(0.9);
-        opacity: 0.4;
+        transform: translate(0, 0);
       }
       50% {
-        transform: scale(1.1);
-        opacity: 0.7;
+        transform: translate(40px, -30px);
       }
       100% {
-        transform: scale(0.95);
-        opacity: 0.5;
+        transform: translate(0, 0);
       }
-    }
-
-    main {
-      width: min(960px, 100%);
-      padding: 3rem;
-      background: var(--panel);
-      border: 1px solid rgba(255, 217, 102, 0.4);
-      border-radius: 32px;
-      box-shadow: 0 20px 80px var(--shadow);
-      position: relative;
-      overflow: hidden;
-    }
-
-    main::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 30% 30%, rgba(255, 214, 102, 0.25), transparent 50%);
-      opacity: 0.6;
-      filter: blur(30px);
-      animation: orbit 9s linear infinite;
-      pointer-events: none;
-    }
-
-    main::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent, rgba(255, 218, 121, 0.3), transparent);
-      mix-blend-mode: screen;
-      animation: shimmer 6s ease-in-out infinite;
-      pointer-events: none;
     }
 
     header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem clamp(1rem, 2vw, 2.5rem);
+      position: relative;
+      z-index: 2;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      font-size: 0.9rem;
+    }
+
+    .logo span {
+      color: var(--aura);
+    }
+
+    .nav-button {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .nav-button:hover {
+      border-color: var(--aura);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    main {
+      padding: 0 clamp(1rem, 2vw, 3rem) 4rem;
       position: relative;
       z-index: 1;
     }
 
-    h1 {
-      font-size: clamp(2.5rem, 3vw + 1rem, 3.5rem);
-      margin: 0;
-      letter-spacing: 0.08em;
-    }
-
-    .subhead {
-      color: rgba(255, 255, 255, 0.7);
-      margin: 1rem 0 2rem;
-      font-size: 1.1rem;
-    }
-
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 2rem;
-    }
-
-    .tag {
-      padding: 0.45rem 1rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 217, 102, 0.6);
-      background: rgba(255, 217, 102, 0.2);
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
-      box-shadow: 0 4px 16px rgba(255, 214, 102, 0.2);
-      backdrop-filter: blur(4px);
-    }
-
-    .cta {
-      display: inline-flex;
-      gap: 0.75rem;
-      align-items: center;
-      padding: 0.9rem 1.6rem;
-      border-radius: 999px;
-      border: none;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: linear-gradient(135deg, #ffd966, #f0a500);
-      color: #1c1c1c;
-      text-decoration: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 3rem 3.5rem;
+      background: linear-gradient(140deg, rgba(14, 17, 38, 0.95), rgba(24, 28, 60, 0.95));
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 80px rgba(3, 7, 18, 0.8);
       position: relative;
       overflow: hidden;
     }
 
-    .cta::after {
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: -30% 10% 20%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent 60%);
+      transform: rotate(var(--spin-angle));
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .hero::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.7), transparent);
-      opacity: 0.7;
-      transform: translateX(-100%);
-      z-index: 0;
-      animation: sheen 2.5s linear infinite;
+      background: repeating-linear-gradient(120deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06) 1px, transparent 1px, transparent 8px);
+      mix-blend-mode: screen;
+      opacity: 0.5;
+      pointer-events: none;
     }
 
-    .cta span {
+    .hero-content {
       position: relative;
       z-index: 1;
     }
 
-    .cta:hover {
+    .hero-title {
+      font-size: clamp(2.8rem, 3vw + 1rem, 4rem);
+      margin: 0;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .hero-sub {
+      margin: 1.2rem 0 2rem;
+      font-size: 1.15rem;
+      line-height: 1.9;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .hero-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 204, 128, 0.08);
+      color: var(--sky);
+      font-size: 0.95rem;
+      transition: transform 0.2s linear;
+      transform: scale(var(--pulse-scale, 1));
+    }
+
+    .hero-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .hero-tag {
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .primary,
+    .secondary {
+      border-radius: 999px;
+      border: none;
+      padding: 0.9rem 1.6rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #f07, #ffb347);
+      color: #111;
+      box-shadow: 0 12px 30px rgba(240, 116, 180, 0.35);
+    }
+
+    .secondary {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .primary:hover,
+    .secondary:hover {
       transform: translateY(-2px) scale(1.01);
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
     }
 
-    .grid {
+    .motion-track {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1.25rem;
-      margin-top: 2rem;
+      margin-top: 3rem;
+    }
+
+    .motion-card {
+      padding: 1.25rem;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
       position: relative;
-      z-index: 1;
+      overflow: hidden;
     }
 
-    .panel {
-      padding: 1.5rem;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(12px);
-      transition: transform 0.3s ease, border-color 0.3s ease;
-      animation: panelGlow 8s ease-in-out infinite;
+    .motion-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      opacity: 0.4;
+      pointer-events: none;
+      animation: pass 5s linear infinite;
     }
 
-    .panel strong {
-      color: var(--gold);
-      font-size: 1.2rem;
+    .motion-card strong {
       display: block;
-      margin-bottom: 0.5rem;
+      color: var(--aura);
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
     }
 
-    @keyframes panelGlow {
+    .motion-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    @keyframes pass {
       0% {
-        transform: translateY(0);
-        border-color: rgba(255, 255, 255, 0.08);
-      }
-      50% {
-        transform: translateY(-4px);
-        border-color: rgba(255, 217, 102, 0.4);
+        transform: translateX(-100%);
       }
       100% {
-        transform: translateY(0);
-        border-color: rgba(255, 255, 255, 0.08);
+        transform: translateX(100%);
       }
     }
 
-    .panel span {
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.7);
-      line-height: 1.5;
+    .story {
+      margin: 4rem auto 0;
+      max-width: 1100px;
+      padding: 0 1rem;
     }
 
-    @keyframes shimmer {
-      0% {
-        transform: translateX(-120%) rotate(20deg);
-      }
-      50% {
-        transform: translateX(120%) rotate(20deg);
-      }
-      100% {
-        transform: translateX(-120%) rotate(20deg);
-      }
+    .story-card {
+      background: linear-gradient(170deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.08));
+      border-radius: 28px;
+      padding: 2.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.45);
     }
 
-    @keyframes orbit {
-      0% {
-        transform: translate(-10%, -10%) scale(1);
-      }
-      50% {
-        transform: translate(10%, 5%) scale(1.05);
-      }
-      100% {
-        transform: translate(-10%, -10%) scale(1);
-      }
+    .story-card h2 {
+      margin-top: 0;
+      font-size: clamp(2rem, 2.5vw + 0.5rem, 2.5rem);
+      letter-spacing: 0.15em;
     }
 
-    @keyframes sheen {
-      0% {
-        transform: translateX(-120%) skewX(-10deg);
-      }
-      50% {
-        transform: translateX(120%) skewX(-10deg);
-      }
-      100% {
-        transform: translateX(120%) skewX(-10deg);
-      }
+    .story-card p {
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.82);
     }
 
-    @media (max-width: 600px) {
-      main {
-        padding: 2.5rem 1.75rem;
+    .showcase {
+      margin: 3rem auto 0;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .showcase-card {
+      border-radius: 20px;
+      padding: 1.5rem;
+      background: #0b1030;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .showcase-card::before {
+      content: '';
+      position: absolute;
+      inset: -30% -20%;
+      background: radial-gradient(circle, rgba(255, 117, 150, 0.25), transparent 60%);
+      opacity: 0.6;
+      animation: float 12s linear infinite;
+    }
+
+    .showcase-card strong {
+      color: var(--sky);
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .showcase-card span {
+      display: block;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .cta-section {
+      margin: 4rem auto 0;
+      max-width: 1100px;
+      text-align: center;
+      padding: 2rem 1rem 0;
+    }
+
+    .cta-section h3 {
+      font-size: 1.8rem;
+      letter-spacing: 0.2em;
+    }
+
+    .cta-section p {
+      margin: 0.5rem auto 1.5rem;
+      max-width: 600px;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .cta-link {
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-weight: 600;
+      color: #111;
+      background: linear-gradient(135deg, #f7d1ff, #a2f0ff);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .cta-link:hover {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        padding: 2.5rem 1.5rem 3rem;
       }
 
-      .cta {
-        width: 100%;
-        justify-content: center;
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
       }
     }
   </style>
 </head>
 <body>
+  <div class="orb"></div>
+  <div class="orb-shadow"></div>
+  <header>
+    <div class="logo"><span>AI</span> Workshop</div>
+    <button class="nav-button">Inspire</button>
+  </header>
   <main>
-    <header>
-      <h1>Golden Resonance</h1>
-      <p class="subhead">大胆かつ洗練されたビジュアルで、あなたのストーリーを輝かせる。</p>
-    </header>
-    <div class="tag-row">
-      <span class="tag">光と影</span>
-      <span class="tag">表現力</span>
-      <span class="tag">プレミアム</span>
-    </div>
-    <a class="cta" href="#portfolio"><span>See the glow</span></a>
-    <div class="grid" id="portfolio">
-      <article class="panel">
-        <strong>意図的なコントラスト</strong>
-        <span>ダークな背景にゴールドの煌めきを配置し、視線を自然と中央に集中させます。</span>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="hero-highlight">このページはAIとの対話から生まれた、唯一無二のビジュアル物語</p>
+        <h1 class="hero-title">光速デザイン</h1>
+        <p class="hero-sub">
+          アニメーションのような躍動感、映画のように深い奥行き、そして思わず声を上げたくなる躍動。
+          私たちはあなたのイメージを言葉に変え、AIが描き出した<em>アニメージュ</em>スタイルの世界を
+          一緒に作り上げます。
+        </p>
+        <div class="hero-tags">
+          <span class="hero-tag">思いを形に</span>
+          <span class="hero-tag">アニメ風表現</span>
+          <span class="hero-tag">高速プロトタイピング</span>
+          <span class="hero-tag">柔軟なフィードバック</span>
+        </div>
+        <div class="hero-actions">
+          <button class="primary">今すぐリクエスト</button>
+          <button class="secondary">構想を共有</button>
+        </div>
+        <div class="motion-track">
+          <article class="motion-card">
+            <strong>ダイナミックな層構造</strong>
+            <p>背景と前景の光、粒子、ラインを複雑に重ねて、アニメの演出を彷彿とさせる奥行きを生み出します。</p>
+          </article>
+          <article class="motion-card">
+            <strong>トーンとリズム</strong>
+            <p>音楽的なアクセントが効いたレイアウトで、読者にページを進むごとに心躍る体験を届けます。</p>
+          </article>
+          <article class="motion-card">
+            <strong>対話によるアジャイル</strong>
+            <p>あなたからの言葉をトリガーに、AIとともに表情豊かなアニメ的世界を毎回アップデート。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="story">
+      <div class="story-card">
+        <h2>作りたい世界を、言葉で描いてください</h2>
+        <p>
+          あなたの「かっこいい」の定義を聞かせてください。色、光、質感、リズム、そして感情。
+          ここではどんな説明も手がかりになります。私とAIがその言葉を解釈し、まるでアニメのワンシーンのようなページを組み立てます。
+          さらに、想像の一歩先を行く演出を加えて、見る人の心を掴むランディングページを共に創造しましょう。
+        </p>
+      </div>
+    </section>
+
+    <section class="showcase">
+      <article class="showcase-card">
+        <strong>01 / 色彩で語る</strong>
+        <span>紫と黄金、青いネオンが混ざり合う美術館の夜。色を一つ選ぶたびに、世界が整うような循環を意識しています。</span>
       </article>
-      <article class="panel">
-        <strong>洗練されたタイポグラフィ</strong>
-        <span>太めの文字盤、間隔、余白で、力強さと余裕を同時に演出しています。</span>
+      <article class="showcase-card">
+        <strong>02 / 光と粒子の演出</strong>
+        <span>微細な光の帯、拡散するオーブ、アニメーションで魅せる粒子。パーツごとに動きをつけて、躍動感のあるスクロールを作成します。</span>
       </article>
-      <article class="panel">
-        <strong>未来感と温かみ</strong>
-        <span>デジタル感のあるグラデーションと金色の温度差が、居心地の良い未来都市を彷彿とさせます。</span>
+      <article class="showcase-card">
+        <strong>03 / 対話とプロト</strong>
+        <span>このページのように、質問と回答を繰り返すことで、コンセプトを磨きながら素早くプロトタイプを完成させていきます。</span>
       </article>
-    </div>
+    </section>
+
+    <section class="cta-section">
+      <h3>次の一歩を、共に。</h3>
+      <p>言葉で伝えるだけで、光るページが仕上がっていく。AIと私のチームワークで、あなたのためのスタイリッシュな世界を描きましょう。</p>
+      <button class="cta-link">構想を送る</button>
+    </section>
   </main>
+
+  <script>
+    const highlight = document.querySelector('.hero-highlight');
+    function pulse() {
+      const scale = 1 + Math.sin(Date.now() / 700) * 0.04;
+      highlight.style.setProperty('--pulse-scale', scale);
+      requestAnimationFrame(pulse);
+    }
+    pulse();
+
+    function rotateGlow() {
+      const angle = Math.sin(Date.now() / 1400) * 8;
+      document.documentElement.style.setProperty('--spin-angle', `${angle}deg`);
+      requestAnimationFrame(rotateGlow);
+    }
+    rotateGlow();
+  </script>
 </body>
 </html>
