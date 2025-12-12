@@ -3,130 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>光速デザインスタジオ</title>
+  <title>AICパーティクルプレイ</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="orb"></div>
-  <div class="orb-shadow"></div>
-  <header>
-    <div class="logo"><span>AIC</span> Fun</div>
-    <button class="nav-button">PLAY</button>
-  </header>
-  <main>
-    <section class="hero">
-      <div class="hero-grid">
-        <div class="hero-content">
-          <p class="hero-highlight">慶應義塾大学のAICで生まれるワクワクをまとめたピクセルログ</p>
-          <h1 class="hero-title">AIC わくわくランド</h1>
-          <p class="hero-sub" data-text="AIC (Advanced Innovation Challenge) は、慶應義塾大学の学生が自由な発想でプロジェクトを打ち上げる場。コラボカフェのような仲間、夜まで続く議論、そしてアイデアがゲーム内触発する楽しさを、見た目も声もピクセル世界で伝えます。">
-            <span class="typing"></span><span class="cursor">｜</span>
-          </p>
-          <div class="hero-tags">
-            <span class="hero-tag">慶應の挑戦</span>
-            <span class="hero-tag">クリエイティブ</span>
-            <span class="hero-tag">コラボの熱</span>
-            <span class="hero-tag">未来の予感</span>
-          </div>
-          <div class="status-row">
-            <span>LEVEL: AIC</span>
-            <span>CREW 120+</span>
-            <span>IDEA 4G</span>
-          </div>
-          <div class="hero-actions">
-            <button class="primary">リセットして作る</button>
-            <button class="secondary">アイデアをチャット</button>
-          </div>
-          <div class="motion-track">
-            <article class="motion-card">
-              <strong>プロジェクトピッチ</strong>
-              <p>AICでは、アイデアを一分ピッチでシェア。リハーサルもBerryPhonicなサウンドと一緒なので、テンション抜群です。</p>
-            </article>
-            <article class="motion-card">
-              <strong>キャンパスナイト</strong>
-              <p>図書館を飛び出して、一晩中つながる仲間とAI議論。慶應の食堂メニューとともに、眠らない共同制作が始まります。</p>
-            </article>
-            <article class="motion-card">
-              <strong>共創エネルギー</strong>
-              <p>経済学部の先輩と理工の後輩が交差し、アート×テックのコラボで毎週アップグレードされるワークショップ。</p>
-            </article>
-          </div>
-        </div>
-        <div class="hero-visual">
-          <img src="shashin.png" alt="光が溢れる未来都市をモチーフにしたビジュアル">
-        </div>
-      </div>
-    </section>
-
-    <section class="story">
-      <div class="story-card">
-        <h2>クエストログ：AICのたのしいところ</h2>
-        <p>
-          AICは慶應義塾大学の未来に向かう学生プロジェクトが集うエリア。メンターや先輩、後輩と共に、深夜まで協力して根っこからビジョンを育てる場です。
-          もっと頑張りたい、もっと笑いたい、もっと試したい。そんな声をピクセルアートで直感的に並べました。
-        </p>
-      </div>
-    </section>
-
-    <section class="showcase">
-      <article class="showcase-card">
-        <strong>01 / ミーティングカフェ</strong>
-        <span>AICラウンジのように、コーヒー片手に自由なテーマトーク。ボードに落書きしたアイデアがそのまま世界の1画面に。</span>
-      </article>
-      <article class="showcase-card">
-        <strong>02 / テックラボ</strong>
-        <span>ターミナルとイーゼルが並ぶ場所。実験的プロトタイプとアナログの模型が混ざり合い、見た目以上に泥臭い楽しさを生み出します。</span>
-      </article>
-      <article class="showcase-card">
-        <strong>03 / パフォーマンスデー</strong>
-        <span>学内発表の日はまるでゲームショー。スクリーンに映る成果と、声援が響く空気と、そのほとばしる熱量を再現しています。</span>
-      </article>
-    </section>
-
-    <section class="cta-section">
-      <h3>PLAYER READY?</h3>
-      <p>言葉でコマンドを入力すれば、レトロなマップが動き出す。AIと私がゴールドディスクのようなピクセルアートを刻んでいきます。</p>
-      <button class="cta-link">シグナル送信</button>
-    </section>
-  </main>
-
+  <div class="info-card">
+    <p class="eyebrow">p5.js Experiment</p>
+    <h1>AICのきらめく波動</h1>
+    <p>粒子たちが自由に動きながら、近づくと光のラインでつながる。上の状態は慶應義塾大学AICで交わるアイデアの交差点を表現しています。</p>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
   <script>
-    const highlight = document.querySelector('.hero-highlight');
-    function pulse() {
-      const scale = 1 + Math.sin(Date.now() / 700) * 0.04;
-      highlight.style.setProperty('--pulse-scale', scale);
-      requestAnimationFrame(pulse);
-    }
-    pulse();
+    const particles = [];
+    const maxParticles = 160;
+    const linkDistance = 140;
 
-    function rotateGlow() {
-      const angle = Math.sin(Date.now() / 1400) * 8;
-      document.documentElement.style.setProperty('--spin-angle', `${angle}deg`);
-      requestAnimationFrame(rotateGlow);
-    }
-    rotateGlow();
+    class Particle {
+      constructor() {
+        this.position = createVector(random(width), random(height));
+        this.velocity = p5.Vector.random2D().mult(random(0.4, 1.5));
+        this.size = random(2, 5);
+        this.hue = random(150, 220);
+      }
 
-    const heroSub = document.querySelector('.hero-sub');
-    if (heroSub) {
-      const typingSpan = heroSub.querySelector('.typing');
-      const text = heroSub.dataset.text || '';
-      let charIndex = 0;
-
-      function typeWriter() {
-        typingSpan.textContent = text.slice(0, charIndex);
-        if (charIndex <= text.length) {
-          charIndex += 1;
-          setTimeout(typeWriter, 42);
-        } else {
-          setTimeout(() => {
-            charIndex = 0;
-            typingSpan.textContent = '';
-            typeWriter();
-          }, 1500);
+      update() {
+        this.position.add(this.velocity);
+        if (this.position.x > width || this.position.x < 0) {
+          this.velocity.x *= -1;
+        }
+        if (this.position.y > height || this.position.y < 0) {
+          this.velocity.y *= -1;
         }
       }
 
-      typeWriter();
+      draw() {
+        noStroke();
+        fill(this.hue, 180, 250, 200);
+        circle(this.position.x, this.position.y, this.size);
+      }
+    }
+
+    function setup() {
+      createCanvas(windowWidth, windowHeight);
+      colorMode(HSB);
+      for (let i = 0; i < maxParticles; i += 1) {
+        particles.push(new Particle());
+      }
+    }
+
+    function draw() {
+      background(220, 80, 5, 30);
+      particles.forEach((particle, idx) => {
+        particle.update();
+        particle.draw();
+        for (let j = idx + 1; j < particles.length; j += 1) {
+          const target = particles[j];
+          const d = dist(
+            particle.position.x,
+            particle.position.y,
+            target.position.x,
+            target.position.y
+          );
+          if (d < linkDistance) {
+            const alpha = map(d, 0, linkDistance, 190, 0);
+            stroke(180, 150, 250, alpha);
+            strokeWeight(1);
+            line(
+              particle.position.x,
+              particle.position.y,
+              target.position.x,
+              target.position.y
+            );
+          }
+        }
+      });
+    }
+
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
     }
   </script>
 </body>
