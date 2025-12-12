@@ -19,9 +19,8 @@
         <div class="hero-content">
           <p class="hero-highlight">ゲーマー心をくすぐる、ノスタルジックなピクセルパワー</p>
           <h1 class="hero-title">8ビット・パルス</h1>
-          <p class="hero-sub">
-            チップチューンのリズムと粗いドットアートが合わさった世界で、あなたのメッセージが光るタイトル画面になる。
-            それはまるで、古き良きゲームのイントロムービーを自作するような体験です。
+          <p class="hero-sub" data-text="チップチューンのリズムと粗いドットアートが合わさった世界で、あなたのメッセージが光るタイトル画面になる。それはまるで、古き良きゲームのイントロムービーを自作するような体験です。">
+            <span class="typing"></span><span class="cursor">｜</span>
           </p>
           <div class="hero-tags">
             <span class="hero-tag">ピクセル激情</span>
@@ -106,6 +105,29 @@
       requestAnimationFrame(rotateGlow);
     }
     rotateGlow();
+
+    const heroSub = document.querySelector('.hero-sub');
+    if (heroSub) {
+      const typingSpan = heroSub.querySelector('.typing');
+      const text = heroSub.dataset.text || '';
+      let charIndex = 0;
+
+      function typeWriter() {
+        typingSpan.textContent = text.slice(0, charIndex);
+        if (charIndex <= text.length) {
+          charIndex += 1;
+          setTimeout(typeWriter, 42);
+        } else {
+          setTimeout(() => {
+            charIndex = 0;
+            typingSpan.textContent = '';
+            typeWriter();
+          }, 1500);
+        }
+      }
+
+      typeWriter();
+    }
   </script>
 </body>
 </html>
