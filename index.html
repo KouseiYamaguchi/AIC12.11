@@ -8,9 +8,14 @@
 </head>
 <body>
   <div class="info-card">
-    <p class="eyebrow">p5.js Experiment</p>
-    <h1>AICのきらめく波動</h1>
-    <p>粒子たちが自由に動きながら、近づくと光のラインでつながる。上の状態は慶應義塾大学AICで交わるアイデアの交差点を表現しています。</p>
+    <div class="lang-row">
+      <button data-lang="ja" class="lang-btn active">日本語</button>
+      <button data-lang="en" class="lang-btn">English</button>
+      <button data-lang="de" class="lang-btn">Deutsch</button>
+    </div>
+    <p class="eyebrow" data-key="eyebrow">p5.js Experiment</p>
+    <h1 data-key="headline">AICのきらめく波動</h1>
+    <p data-key="hero">粒子たちが自由に動きながら、近づくと光のラインでつながる。上の状態は慶應義塾大学AICで交わるアイデアの交差点を表現しています。</p>
   </div>
   <div class="content-grid">
     <article class="card">
@@ -96,6 +101,70 @@
     function windowResized() {
       resizeCanvas(windowWidth, windowHeight);
     }
+  </script>
+  <script>
+    const translations = {
+      ja: {
+        eyebrow: 'p5.js Experiment',
+        headline: 'AICのきらめく波動',
+        hero: '粒子たちが自由に動きながら、近づくと光のラインでつながる。上の状態は慶應義塾大学AICで交わるアイデアの交差点を表現しています。',
+        card1Title: 'About AIC',
+        card1Body: '慶應義塾大学の Advanced Innovation Challenge は、学内外のインスピレーションを持ち寄り、夜遅くまで語り合いながらプロジェクトを育てる場。多様なバックグラウンドの学生とメンターが、気ままにアイデアを試遊するような自由な文化が特徴です。',
+        card2Title: 'My Journey',
+        card2Body: '入学当初は開発とデザインの境界で悩んでいましたが、AICのピアレビューとデモデイが私のフィードバックループの源になりました。今では、プロトタイプから操作体験やサウンドまですべて自分で整えることを楽しんでいます。',
+        card3Title: 'Why It Matters',
+        card3Body: 'AICでは失敗も次のレベルへのダッシュポイント。互いの「ヤバい」「ウケる」を直感的に交換し、現実の講義では得られない素直さとスピードで発想を進化させています。それを支えてくれるのが夕焼けムードの図書室と共創カフェです。',
+      },
+      en: {
+        eyebrow: 'p5.js Experiment',
+        headline: 'AIC Spark Waves',
+        hero: 'Particles drift freely and connect with luminous lines whenever they come close—an homage to the intersection of ideas inside Keio University’s Advanced Innovation Challenge.',
+        card1Title: 'About AIC',
+        card1Body: 'The Advanced Innovation Challenge gathers curious students from across Keio to nurture projects through late-night conversations and playful experimentation with mentors and peers.',
+        card2Title: 'My Journey',
+        card2Body: 'Early on I wrestled with the edges of development and design, but the peer reviews and demo days at AIC rewired my feedback loop. Now I relish shaping everything from prototypes to interactive feel and sound.',
+        card3Title: 'Why It Matters',
+        card3Body: 'At AIC, “failure” becomes a dash point to the next level. Exchanging raw “Whoa” and “Hype” moments lets ideas evolve with a candid speed you seldom find in lecture halls.',
+      },
+      de: {
+        eyebrow: 'p5.js Experiment',
+        headline: 'AIC Strahlenfeld',
+        hero: 'Partikel schweben frei und verbinden sich mit leuchtenden Linien, sobald sie sich nähern—eine Hommage an die Ideenübergänge im Advanced Innovation Challenge der Keio University.',
+        card1Title: 'Über AIC',
+        card1Body: 'Der Advanced Innovation Challenge bringt neugierige Studierende zusammen, um Projekte durch nächtliche Gespräche und experimentelle Spielfreude gemeinsam mit Mentoren zu entwickeln.',
+        card2Title: 'Mein Weg',
+        card2Body: 'Anfangs rang ich mit den Grenzen zwischen Entwicklung und Design, doch die Peer Reviews und Demo Days im AIC haben meinen Feedback-Zyklus neu justiert. Heute genieße ich es, von Prototypen bis Sound alles selbst zu orchestrieren.',
+        card3Title: 'Warum es zählt',
+        card3Body: 'Im AIC wird ein Scheitern zum Energieschub für die nächste Level-Stufe. Rohe „Wow“- und „Geht ab“-Momente werden ausgetauscht und lassen die Ideen mit einer Ehrlichkeit reifen, die man im Hörsaal selten findet.',
+      },
+    };
+
+    const cards = document.querySelectorAll('.card');
+    const infoKeys = ['eyebrow', 'headline', 'hero'];
+    const infoEls = infoKeys.map((key) => document.querySelector(`[data-key="${key}"]`));
+    function setLanguage(lang) {
+      const texts = translations[lang] || translations.ja;
+      infoKeys.forEach((key, idx) => {
+        infoEls[idx].textContent = texts[key];
+      });
+      cards[0].querySelector('h2').textContent = texts.card1Title;
+      cards[0].querySelector('p').textContent = texts.card1Body;
+      cards[1].querySelector('h2').textContent = texts.card2Title;
+      cards[1].querySelector('p').textContent = texts.card2Body;
+      cards[2].querySelector('h2').textContent = texts.card3Title;
+      cards[2].querySelector('p').textContent = texts.card3Body;
+      document.querySelectorAll('.lang-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+    }
+
+    document.querySelectorAll('.lang-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        setLanguage(btn.dataset.lang);
+      });
+    });
+
+    setLanguage('ja');
   </script>
 </body>
 </html>
